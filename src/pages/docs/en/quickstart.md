@@ -56,18 +56,18 @@ Visit [http://localhost:3000](http://localhost:3000) to see the "Hello world" me
 
 Let's walk through the steps of building typesafe API with Zephyr.
 
-Any file contained in the `src/api` directory is mapped to `/*` and will be considered as an API route.
+Any file contained in the `src/routes` directory is mapped to `/*` and will be considered as an API route.
 
-By default, we have `src/api/index.ts`, which maps to `/`
+By default, we have `src/routes/index.ts`, which maps to `/`
 
-You may export **HTTP methods** (`get`, `post`, `put`, `delete`, `patch`) as functions from each file. They are created with the [`defineRoute()`](/docs/core/define-route) function.
+You may export **HTTP verbs** , i.e. `GET`, `POST`, `PUT`, `DELETE`, `PATCH` as functions from each file. They are created with the [`defineRoute()`](/docs/core/define-route) function.
 
 The following API route returns a **JSON** response with **200** status code
 
-```ts title="src/api/index.ts"
+```ts title="src/routes/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 
-export const get = defineRoute({
+export const GET = defineRoute({
   handler(req, res) {
     return res.status(200).json({ foo: 'bar' });
   },
@@ -87,13 +87,13 @@ The API routes that we going to create are:
 
 #### `GET /todos`
 
-Create a `src/api/todos/index.ts` file and export a `get` route.
+Create a `src/routes/todos/index.ts` file and export a `GET` route.
 
-```ts title="src/api/todos/index.ts"
+```ts title="src/routes/todos/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 import { getTodos } from '@services/todo';
 
-export const get = defineRoute({
+export const GET = defineRoute({
   handler(req, res) {
     const todos = getTodos();
     return res.json({ todos });
@@ -103,19 +103,19 @@ export const get = defineRoute({
 
 #### `GET /todos/[todoId]`
 
-Create a `src/api/todos/[todoId].ts` file and export a `get` route.
+Create a `src/routes/todos/[todoId].ts` file and export a `GET` route.
 
 We also declare a `schema` for the route to have **type checking** and **request validation**. Learn more about [route schema](/docs/core/define-route.md#declaring-schema).
 
 Note that this is also how we declare a dynamic route, which allows us to get the `[todoId]` from `req.params`.
 
-```ts title="src/api/todos/[todoId].ts"
+```ts title="src/routes/todos/[todoId].ts"
 import { defineRoute } from '@zephyr-js/core';
 import { z } from 'zod';
 import { TodoSchema } from '@models/todo';
 import { getTodoById } from '@services/todo';
 
-export const get = defineRoute({
+export const GET = defineRoute({
   schema: z.object({
     params: z.object({
       todoId: z.string(),
@@ -134,22 +134,22 @@ export const get = defineRoute({
 
 #### `POST /todos`
 
-Export a `post` route from the `src/api/todos/index.ts` file that we created earlier.
+Export a `POST` route from the `src/routes/todos/index.ts` file that we created earlier.
 
-```ts title="src/api/todos/index.ts"
+```ts title="src/routes/todos/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 import { z } from 'zod';
 import { TodoSchema } from '@models/todo';
 import { getTodos, createTodos } from '@services/todo';
 
-export const get = defineRoute({
+export const GET = defineRoute({
   handler(req, res) {
     const todos = getTodos();
     return res.json({ todos });
   },
 });
 
-export const post = defineRoute({
+export const POST = defineRoute({
   schema: z.object({
     body: z.object({
       name: z.string(),

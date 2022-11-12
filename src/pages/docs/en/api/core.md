@@ -38,21 +38,21 @@ const app = await createApp({
 
 We can declare API route by calling the `defineRoute()` function.
 
-```ts title="src/api/index.ts"
+```ts title="src/routes/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 
-export const get = defineRoute({
+export const GET = defineRoute({
   handler(req, res) {
     return res.json({ foo: 'bar' });
   },
 });
 ```
 
-The `handler` prop is the main handler of the request which receives two arguments. `req` is an instance of `ZephyrRequest` while `res` is an instance of `ZephyrResponse`. They supports all the properties of [`ExpressRequest`](https://expressjs.com/en/4x/api.html#req) and [`ExpressResponse`](https://expressjs.com/en/4x/api.html#res).
+The `handler` prop is the main handler of the request which receives two arguments. `req` is an instance of `ZephyrRequest` while `res` is an instance of `ZephyrResponse`. They supports all the properties of Express [`Request`](https://expressjs.com/en/4x/api.html#req) and Express [`Response`](https://expressjs.com/en/4x/api.html#res).
 
 The export name represents the request method, in this case is a `GET` request.
 
-Request path will be inferred from the file name. `src/api/index.ts` will be mapped to `/`.
+Request path will be inferred from the file name. `src/routes/index.ts` will be mapped to `/`.
 
 ### Declaring Schema
 
@@ -65,11 +65,11 @@ The supported fields are:
 - `body`
 - `response`
 
-```ts title="src/api/index.ts"
+```ts title="src/routes/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 import { z } from 'zod';
 
-export const post = defineRoute({
+export const POST = defineRoute({
   schema: z.object({
     body: z.object({
       foo: z.string(),
