@@ -9,18 +9,23 @@ import Search from './Search';
 
 type Props = {
   currentPage: string;
+  hasMenu?: boolean;
 };
 
-const { currentPage } = Astro.props as Props;
+const { currentPage, hasMenu = false } = Astro.props as Props;
 const lang = getLanguageFromURL(currentPage);
 ---
 
 <header>
   <SkipToContent />
   <nav class="nav-wrapper" title="Top Navigation">
-    <div class="menu-toggle">
-      <SidebarToggle client:idle />
-    </div>
+    {
+      hasMenu && (
+        <div class="menu-toggle">
+          <SidebarToggle client:idle />
+        </div>
+      )
+    }
     <div class="logo flex">
       <a href="/">
         <ZephyrLogo size={30} />
