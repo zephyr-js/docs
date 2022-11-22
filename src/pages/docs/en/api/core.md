@@ -36,16 +36,18 @@ const app = await createApp({
 
 ### Basic Usage
 
-We can declare API route by calling the `defineRoute()` function.
+We can declare API route by exporting HTTP verb as function and returning the route specification declared with the `defineRoute()` function.
 
 ```ts title="src/routes/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 
-export const GET = defineRoute({
-  handler(req, res) {
-    return res.json({ foo: 'bar' });
-  },
-});
+export function GET() {
+  return defineRoute({
+    handler(req, res) {
+      return res.json({ foo: 'bar' });
+    },
+  });
+}
 ```
 
 The `handler` prop is the main handler of the request which receives two arguments. `req` is an instance of `ZephyrRequest` while `res` is an instance of `ZephyrResponse`. They supports all the properties of Express [`Request`](https://expressjs.com/en/4x/api.html#req) and Express [`Response`](https://expressjs.com/en/4x/api.html#res).
@@ -80,9 +82,9 @@ export const POST = defineRoute({
       bar: z.string(),
     }),
   }),
-  handler(req, res) {
+  handler(req) {
     const { foo, bar } = req.body; // Type checked and validated
-    return res.json({ foo, bar }); // Type checked
+    return { foo, bar }; // Type checked
   },
 });
 ```
@@ -137,8 +139,8 @@ defineRoute({
   onBeforeValidate(req) {
     console.log(req);
   },
-  handler(req, res) {
-    return res.send('OK');
+  handler() {
+    return 'OK';
   },
 });
 ```
@@ -164,8 +166,8 @@ defineRoute({
   onRequest(req) {
     console.log(req);
   },
-  handler(req, res) {
-    return res.send('OK');
+  handler() {
+    return 'OK';
   },
 });
 ```
@@ -191,8 +193,8 @@ defineRoute({
   onResponse(req) {
     console.log(req);
   },
-  handler(req, res) {
-    return res.send('OK');
+  handler() {
+    return 'OK';
   },
 });
 ```
@@ -222,8 +224,8 @@ defineRoute({
   onErrorCaptured(req, res, err) {
     console.log(err);
   },
-  handler(req, res) {
-    return res.send('OK');
+  handler() {
+    return 'OK';
   },
 });
 ```

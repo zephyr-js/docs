@@ -11,7 +11,7 @@ We recommend using `create-zephyr-app` to start a new Zephyr app because it does
 **npm**
 
 ```bash
-npm create zephyr-app@latest <app-name>
+npm create zephyr-app <app-name>
 ```
 
 **yarn**
@@ -60,18 +60,20 @@ Any file contained in the `src/routes` directory is mapped to `/*` and will be c
 
 By default, we have `src/routes/index.ts`, which maps to `/`
 
-You may export **HTTP verbs** , i.e. `GET`, `POST`, `PUT`, `DELETE`, `PATCH` as functions from each file. They are created with the [`defineRoute()`](/docs/core/define-route) function.
+You may export **HTTP verbs** , i.e. `GET`, `POST`, `PUT`, `DELETE`, `PATCH` functions from each file. They should return the route specification declared with [`defineRoute()`](/docs/core/define-route) function.
 
-The following API route returns a **JSON** response with **200** status code
+The following API route returns a **JSON** response with default **200** status code
 
 ```ts title="src/routes/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 
-export const GET = defineRoute({
-  handler(req, res) {
-    return res.status(200).json({ foo: 'bar' });
-  },
-});
+export function GET() {
+  return defineRoute({
+    handler() {
+      return { foo: 'bar' };
+    },
+  });
+}
 ```
 
 The above example represents `GET /`
@@ -87,23 +89,25 @@ The API routes that we going to create are:
 
 #### `GET /todos`
 
-Create a `src/routes/todos/index.ts` file and export a `GET` route.
+Create a `src/routes/todos/index.ts` file and export a `GET` function.
 
 ```ts title="src/routes/todos/index.ts"
 import { defineRoute } from '@zephyr-js/core';
 import { getTodos } from '@services/todo';
 
-export const GET = defineRoute({
-  handler(req, res) {
-    const todos = getTodos();
-    return res.json({ todos });
-  },
-});
+export function GET() {
+  return defineRoute({
+    handler() {
+      const todos = getTodos();
+      return { todos };
+    },
+  });
+}
 ```
 
 #### `GET /todos/[todoId]`
 
-Create a `src/routes/todos/[todoId].ts` file and export a `GET` route.
+Create a `src/routes/todos/[todoId].ts` file and export a `GET` function.
 
 We also declare a `schema` for the route to have **type checking** and **request validation**. Learn more about [route schema](/docs/core/define-route.md#declaring-schema).
 
@@ -115,26 +119,28 @@ import { z } from 'zod';
 import { TodoSchema } from '@models/todo';
 import { getTodoById } from '@services/todo';
 
-export const GET = defineRoute({
-  schema: z.object({
-    params: z.object({
-      todoId: z.string(),
+export function GET() {
+  return defineRoute({
+    schema: z.object({
+      params: z.object({
+        todoId: z.string(),
+      }),
+      response: z.object({
+        todo: TodoSchema,
+      }),
     }),
-    response: z.object({
-      todo: TodoSchema,
-    }),
-  }),
-  handler(req, res) {
-    const { todoId } = req.params;
-    const todo = getTodoById(todoId);
-    return res.json({ todo });
-  },
-});
+    handler({ params }) {
+      const { todoId } = params;
+      const todo = getTodoById(todoId);
+      return { todo };
+    },
+  });
+}
 ```
 
 #### `POST /todos`
 
-Export a `POST` route from the `src/routes/todos/index.ts` file that we created earlier.
+Export a `POST` function from the `src/routes/todos/index.ts` file that we created earlier.
 
 ```ts title="src/routes/todos/index.ts"
 import { defineRoute } from '@zephyr-js/core';
@@ -142,28 +148,32 @@ import { z } from 'zod';
 import { TodoSchema } from '@models/todo';
 import { getTodos, createTodos } from '@services/todo';
 
-export const GET = defineRoute({
-  handler(req, res) {
-    const todos = getTodos();
-    return res.json({ todos });
-  },
-});
+export function GET() {
+  return defineRoute({
+    handler() {
+      const todos = getTodos();
+      return { todos };
+    },
+  });
+}
 
-export const POST = defineRoute({
-  schema: z.object({
-    body: z.object({
-      name: z.string(),
-      status: z.enum(['todo', 'doing', 'done']),
+export function POST() {
+  return defineRoute({
+    schema: z.object({
+      body: z.object({
+        name: z.string(),
+        status: z.enum(['todo', 'doing', 'done']),
+      }),
+      response: z.object({
+        todo: TodoSchema,
+      }),
     }),
-    response: z.object({
-      todo: TodoSchema,
-    }),
-  }),
-  handler(req, res) {
-    const todo = createTodo(req.body);
-    return res.json({ todo });
-  },
-});
+    handler({ body }) {
+      const todo = createTodo(req.body);
+      return { todo };
+    },
+  });
+}
 ```
 
 Viola! We just built a set of API routes in a couple of minutes 🎉
