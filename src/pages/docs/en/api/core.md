@@ -229,3 +229,62 @@ defineRoute({
   },
 });
 ```
+
+## Dependency Injection
+
+### Initializing Dependencies
+
+We can initialize and return all our app dependencies with `init` function in `src/lib/deps.ts`
+
+```ts
+import { MyService } from '@/services';
+
+interface AppDeps {
+  myService: MyService;
+}
+
+export async function init(): Promise<AppDeps> {
+  const myService = new MyService();
+  return { myService };
+}
+
+export default { init };
+```
+
+### Providing Dependencies
+
+The `createApp()` function has a `dependencies` argument that allows you to pass in your app dependencies. They will be injected into every API route.
+
+In `src/index.ts`, we import and call the `initializeDependencies` function and pass the instance to `createApp()`
+
+```ts
+import deps from './lib/deps';
+
+async function bootstrap() {
+  const dependencies = await deps.init();
+  const app = await createApp({ dependencies });
+  app.listen(3000);
+}
+
+bootstrap().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
+```
+
+### Consuming Dependencies
+
+`src/routes/index.ts`
+
+```ts
+import { defineRoute } from '@zephyr-js/core';
+import { AppDeps } from '@/lib/deps';
+
+export function GET({ myService }: Pick<AppDeps, 'myService'>) {
+  return defineRoute({
+    handler() {
+      // do stuff with the injected `myService` instance
+    },
+  });
+}
+```

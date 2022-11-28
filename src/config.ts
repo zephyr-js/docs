@@ -53,7 +53,8 @@ export const SIDEBAR: Sidebar = {
 		],
 		'API': [
 			{ text: '@zephyr-js/core', link: 'docs/en/api/core' },
-			{ text: '@zephyr-js/common', link: 'docs/en/api/common' }
+			{ text: '@zephyr-js/common', link: 'docs/en/api/common' },
+			{ text: '@zephyr-js/config', link: 'docs/en/api/config' }
 		],
 	},
 };

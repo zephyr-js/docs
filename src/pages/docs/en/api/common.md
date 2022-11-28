@@ -12,11 +12,11 @@ API route interface in Zephyr application.
 
 ```ts
 interface ZephyrRoute<TRequest extends ZephyrBaseRequest = any, TResponse = any>
-  extends ZephyrRouteHooks {
+  extends ZephyrRouteHooks<TRequest, TResponse> {
   name?: string;
   method: RouteMethod;
   path: string;
-  schema?: AnyZodObject;
+  schema?: ZephyrRouteSchema;
   handler: ZephyrHandler<TRequest, TResponse>;
 }
 ```
@@ -37,7 +37,7 @@ type ZephyrHandler<
 > = (
   req: ZephyrRequest<TRequest>,
   res: ZephyrResponse<TResponse>,
-) => any | Promise<any>;
+) => TResponse | Promise<TResponse> | undefined | Promise<undefined>;
 ```
 
 ## ZephyrRequest
