@@ -180,4 +180,6 @@ Viola! We just built a set of API routes in a couple of minutes 🎉
 
 ## Next Steps
 
-- [Lifecycle hooks](/docs/core/lifecycle-hooks.md)
+- [Lifecycle Hooks](/docs/en/api/core#lifecycle-hooks)
+- [Dependency Injection](/docs/en/api/core#dependency-injection)
+- [Config](/docs/en/api/config)
