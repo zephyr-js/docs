@@ -26,14 +26,44 @@ function load<T extends object>(options: LoadOptions): Promise<T>;
 Config file examples:
 
 - `config/development.yml`
-- `config/test.yaml`
-- `config/production.json`
+- `config/production.yaml`
 
-Supported file extensions are `.yml`, `.yaml` and `.json`
+Supported file extensions are `.yml`, `.yaml`
 
 The file name should be the same as `process.env.NODE_ENV`. So make sure to set `NODE_ENV` to the correct value before running the application.
 
-### dotenv
+### Variables
+
+You may pass custom variables into the `load()` function and Zephyr will parse them accordingly.
+
+Given that you have `config/development.yml`
+
+```yaml
+database:
+  url: <%= it.DB_URL %>
+```
+
+By passing specifying `variables` option on `load()`
+
+```ts
+load({
+  variables: {
+    DB_URL: 'mongodb://localhost:27017',
+  },
+});
+```
+
+The parsed config object will be
+
+```json
+{
+  "database": {
+    "url": "mongodb://localhost:27017"
+  }
+}
+```
+
+### Environment Variables
 
 Zephyr config will automatically take variables in `.env` to fill in the placeholders in config file.
 
@@ -41,7 +71,7 @@ Given that you have `config/development.yml`
 
 ```yaml
 jwt:
-  secret: { { JWT_SECRET } }
+  secret: <%~ process.env.JWT_SECRET %>
 ```
 
 and a root level `.env`
