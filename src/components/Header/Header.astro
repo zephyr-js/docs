@@ -6,6 +6,7 @@ import SkipToContent from './SkipToContent.astro';
 import SidebarToggle from './SidebarToggle';
 import LanguageSelect from './LanguageSelect';
 import Search from './Search';
+import GithubLogo from './GithubLogo.astro';
 
 type Props = {
   currentPage: string;
@@ -41,6 +42,13 @@ const lang = getLanguageFromURL(currentPage);
     <!-- <div class="search-item">
       <Search client:idle />
     </div> -->
+    <a
+      href="https://github.com/zephyr-js/zephyr"
+      target="_blank"
+      class="hover:opacity-60 duration-300"
+    >
+      <GithubLogo size={30} />
+    </a>
   </nav>
 </header>
 
