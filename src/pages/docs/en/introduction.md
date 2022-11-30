@@ -22,12 +22,12 @@ Zephyr provides simple and intuitive interfaces for developers in declaring API 
 
 ## Features
 
-- 🧭 **Intuitive routing** - File-system based routing like Next.js.
+- 🧭 **Intuitive routing** - File-based routing similar to Next.js.
+- ✅ **Built-in validation** - Define schema for API routes, validation is done out of the box.
 - 🪝 **Lifecycle hooks** - Register callbacks on certain points of the request lifecycle.
 - ⚙️ **Functional by default** - Write functions instead of bloated controllers with mass decorators.
 - ✍️ **Typesafe** - Request and response types are typed checked and validated.
-- ✨ **Productivity boost** - Bootstrap your project with [`create-zephyr-app`](quickstart#bootstrapping-project) and start writing API routes.
-- 🍃 **Lightweight** - Zephyr is only a thin layer on top of Express.
+- ✨ **Productivity boost** - Bootstrap your project with [`create-zephyr-app`](quickstart#bootstrapping-project) with zero configuration.
 
 ## Next Steps
 
